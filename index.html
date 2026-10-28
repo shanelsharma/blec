@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BLEC &ndash; Bondi Laser Eye Centre</title>
+<!-- The home-screen name and icon: what this page exists for. Google's own page can't set them. -->
+<meta name="apple-mobile-web-app-title" content="BLEC">
+<meta name="application-name" content="BLEC">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<!-- Private pages: keep them out of search engines, and don't pass this address on. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<style>
+  html, body { margin: 0; height: 100%; background: #ffffff; }
+  #app { display: block; border: 0; width: 100%; height: 100vh; height: 100dvh; }
+  #none { display: none; font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color: #1b1d21; text-align: center; padding: 48px 24px; }
+  #none img { width: 160px; height: 160px; }
+</style>
+</head>
+<body>
+<iframe id="app" title="BLEC Laser Suite"></iframe>
+<div id="none">
+  <img src="apple-touch-icon.png" alt="Bondi Laser Eye Centre">
+  <p>This link is incomplete. Please ask Bondi Laser Eye Centre for your Laser Suite link.</p>
+</div>
+<script>
+  // Shows a person's own Laser Suite page (from the billing sheet's Apps Script) inside this page.
+  // Their private code comes from the link (?p=...), and is remembered on this phone in case the
+  // home-screen icon opens the page without it.
+  var LASER_SUITE = 'https://script.google.com/macros/s/AKfycbyRVzVs4HZ4r-l0q38ySobZxGBdQxIPx5SYUnMnIozkzsW4OvfRfWqQ0DRF7rGiWa0/exec';
+  var code = new URLSearchParams(location.search).get('p') || (/[#&]p=([0-9a-f]{64})/.exec(location.hash) || [])[1] || '';
+  try {
+    if (/^[0-9a-f]{64}$/.test(code)) localStorage.setItem('blecLaserSuite', code);
+    else code = localStorage.getItem('blecLaserSuite') || '';
+  } catch (e) {
+    // Private browsing: nothing is remembered, and the link itself still works.
+  }
+  if (/^[0-9a-f]{64}$/.test(code)) {
+    document.getElementById('app').src = LASER_SUITE + '?page=' + code;
+  } else {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('none').style.display = 'block';
+  }
+</script>
+</body>
+</html>
